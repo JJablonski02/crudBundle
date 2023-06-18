@@ -64,6 +64,21 @@ namespace ServiceContracts.DTO
                 $"Address: {Address}, " +
                 $"Receive News Letters: {ReceiveNewsLetters}";
         }
+
+        public PersonUpdateRequest ToPersonUpdateRequest()
+        {
+            return new PersonUpdateRequest()
+            {
+                PersonID = PersonID,
+                PersonName = PersonName,
+                Address = Address,
+                DateOfBirth = DateOfBirth,
+                Email = Email,
+                Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true),
+                CountryID = CountryID,
+                ReceiveNewsLetters = ReceiveNewsLetters,
+            };
+        }
     }
 
 
