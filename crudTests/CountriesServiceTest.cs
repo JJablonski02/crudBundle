@@ -149,7 +149,7 @@ namespace crudTests
             Guid? countryID = null;
 
             //Act
-            CountryResponse country_response_from_get_method = _countriesService.GetCountryByCountryID(countryID);
+            CountryResponse? country_response_from_get_method = _countriesService.GetCountryByCountryID(countryID);
 
             //Assert
             Assert.Null(country_response_from_get_method);
