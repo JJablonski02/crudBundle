@@ -170,7 +170,7 @@ namespace Services
 
             //get matching person object to update
 
-            Person matchingPerson = _persons.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID);
+            Person? matchingPerson = _persons.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID);
             if(matchingPerson == null)
             {
                 throw new ArgumentException("Given person id doesn't exist");
@@ -188,6 +188,21 @@ namespace Services
 
             return matchingPerson.ToPersonResponse();
 
+        }
+
+        public bool DeletePerson(Guid? personID)
+        {
+            if (personID == null) 
+            {
+            throw new ArgumentNullException(nameof(personID));
+            }
+
+            Person? person = _persons.FirstOrDefault(temp => temp.PersonID == personID);
+                if (person is null)
+                return false;
+
+            _persons.RemoveAll(temp => temp.PersonID == personID);
+                return true;
         }
     }
 }
