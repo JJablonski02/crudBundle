@@ -43,7 +43,7 @@ namespace crudBundle.Controllers
             ViewBag.CurrentSortBy = sortBy;
             ViewBag.CurrentSortOrder = sortOrder.ToString();
 
-            return View(persons);
+            return View(persons); 
         }
     }
 }

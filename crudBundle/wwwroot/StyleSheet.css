@@ -4,6 +4,10 @@
     background-color: #f7f7f7;
 }
 
+frameWidth {
+    width: 15%
+}
+
 * {
     margin: 0px;
     padding: 0px;
