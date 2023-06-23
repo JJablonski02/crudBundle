@@ -9,11 +9,12 @@ namespace crudBundle.Controllers
     {
         //private fields
         private readonly IPersonsService _personsService;
-        //private readonly ICountriesService _countriesService;
+        private readonly ICountriesService _countriesService;
 
-        public PersonsController(IPersonsService personsService)
+        public PersonsController(IPersonsService personsService, ICountriesService countriesService)
         {
             _personsService = personsService;
+            _countriesService = countriesService;
         }
 
         [Route("persons/index")]
@@ -44,6 +45,38 @@ namespace crudBundle.Controllers
             ViewBag.CurrentSortOrder = sortOrder.ToString();
 
             return View(persons); 
+        }
+
+
+        //Executes when the user clicks on "Create Person" hyperlink (while opening the create view)
+        [Route("persons/create")]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            List<CountryResponse> countries = _countriesService.GetAllCountries();
+            ViewBag.countries = countries;  
+            return View(countries);
+
+        }
+
+        [HttpPost]
+        [Route("persons/create")]
+        public IActionResult Create(PersonAddRequest personAddRequest)
+        {
+            if(!ModelState.IsValid)
+            {
+                List<CountryResponse> countries = _countriesService.GetAllCountries();
+                ViewBag.countries = countries;
+
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).SelectMany(e => e.ErrorMessage).ToList();
+                return View();
+            }
+
+            //call the service method
+            PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
+            
+            //navigate to Index() action method
+            return RedirectToAction("Index", "Persons");
         }
     }
 }
