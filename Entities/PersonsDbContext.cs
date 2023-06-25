@@ -45,6 +45,19 @@ namespace Entities
             {
                 modelBuilder.Entity<Person>().HasData(person);
             }
+
+            //Fluent API
+            modelBuilder.Entity<Person>().Property(temp => temp.TIN)
+                .HasColumnName("TaxIdentificationNumber").HasColumnType("varchar(8)").HasDefaultValue("empty");
+
+            //modelBuilder.Entity<Person>().HasIndex(temp => temp.TIN).IsUnique();
+            modelBuilder.Entity<Person>().ToTable(t => t.HasCheckConstraint("CHK_TIN", "len([TaxIdentificationNumber]) = 8"));
+
+            //Table Relations
+            //modelBuilder.Entity<Person>(entity =>
+            //{
+            //    entity.HasOne<Country>(c => c.country).WithMany(p => p.Persons).HasForeignKey(p => p.CountryID);
+            //});
         }
 
         public List<Person> sp_GetAllPersons()

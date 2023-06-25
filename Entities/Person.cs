@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Entities
         public Guid PersonID { get; set; }
 
         [StringLength(50)] //nvarchar (40) in db
+        //[Required]
         public string? PersonName { get; set; }
 
         [StringLength(50)]
@@ -27,5 +29,10 @@ namespace Entities
         public string? Address { get; set; }
 
         public bool ReceiveNewsLetters { get; set; }
+
+        public string? TIN { get; set; } // Text identification number
+
+        [ForeignKey("CountryID")]
+        public virtual Country? Country { get; set; }
     }
 }
