@@ -96,7 +96,7 @@ namespace ServiceContracts.DTO
             return new PersonResponse()
             {
                 PersonID = person.PersonID,
-                PersonName = person.Name,
+                PersonName = person.PersonName,
                 Email = person.Email,
                 Address = person.Address,
                 DateOfBirth = person.DateOfBirth,

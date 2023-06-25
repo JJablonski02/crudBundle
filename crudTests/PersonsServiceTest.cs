@@ -274,7 +274,7 @@ namespace crudTests
                 _testOutputHelper.WriteLine(person_response_from_add.ToString());
             }
             //Act
-            List<PersonResponse>? persons_list_from_search = _personService.GetFilteredPersons(nameof(Person.Name), "ma");
+            List<PersonResponse>? persons_list_from_search = _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
 
             //print persons_list_from_get
             _testOutputHelper.WriteLine("Actual");
@@ -359,7 +359,7 @@ namespace crudTests
                 _testOutputHelper.WriteLine(person_response_from_add.ToString());
             }
             //Act
-            List<PersonResponse>? persons_list_from_search = _personService.GetFilteredPersons(nameof(Person.Name), "ma");
+            List<PersonResponse>? persons_list_from_search = _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
 
             //print persons_list_from_get
             _testOutputHelper.WriteLine("Actual");
@@ -448,7 +448,7 @@ namespace crudTests
             List<PersonResponse> allPersons = _personService.GetAllPersons();
 
             //Act
-            List<PersonResponse>? persons_list_from_sort = _personService.GetSortedPersons(allPersons ,nameof(Person.Name), SortOrderOptions.DESC);
+            List<PersonResponse>? persons_list_from_sort = _personService.GetSortedPersons(allPersons ,nameof(Person.PersonName), SortOrderOptions.DESC);
 
             //print persons_list_from_get
             _testOutputHelper.WriteLine("Actual");
