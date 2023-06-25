@@ -239,6 +239,11 @@ frameWidth {
     text-align: center;
 }
 
+.center-box{
+    width: 70%;
+    margin:auto;
+}
+
 .box {
     margin: 10px 20px;
     padding: 15px;
