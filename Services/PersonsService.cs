@@ -63,7 +63,10 @@ namespace Services
         public List<PersonResponse> GetAllPersons()
         {
             //SELECT * from Persons 
-            return _dbContext.Persons.ToList()
+            //return _dbContext.Persons.ToList()
+            //    .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
+
+            return _dbContext.sp_GetAllPersons()
                 .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
         }
 
