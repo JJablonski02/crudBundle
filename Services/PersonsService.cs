@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using Services.Helpers;
 using ServiceContracts.Enums;
 using Microsoft.EntityFrameworkCore;
+using CsvHelper;
+using System.Globalization;
 
 namespace Services
 {
@@ -210,6 +212,22 @@ namespace Services
             await _dbContext.SaveChangesAsync();
 
                 return true;
+        }
+
+        public async Task<MemoryStream> GetPersonsCSV()
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            StreamWriter streamWriter = new StreamWriter(memoryStream);
+            CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture, leaveOpen: true);
+
+            csvWriter.WriteHeader<PersonResponse>(); //PersonID, PersonName... etc.
+            csvWriter.NextRecord();
+
+            List<PersonResponse> persons = _dbContext.Persons.Include("Country").Select(temp => temp.ToPersonResponse()).ToList();
+            await csvWriter.WriteRecordsAsync(persons);
+            
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }
