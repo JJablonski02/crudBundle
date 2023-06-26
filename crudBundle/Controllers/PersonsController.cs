@@ -176,12 +176,21 @@ namespace crudBundle.Controllers
             };
         }
 
-        [Route("PersonsCVS")]
+        [Route("PersonsCSV")]
         public async Task<IActionResult> PersonsCSV()
         {
            MemoryStream memoryStream = await _personsService.GetPersonsCSV();
 
             return File(memoryStream, "application/octet-stream", "persons.csv");
+        }
+
+        [Route("PersonsExcel")]
+        public async Task<IActionResult> PersonsExcel()
+        {
+            MemoryStream memoryStream = await _personsService.GetPersonsExcel();
+            
+            //Returns memory stream with xcel mimetype for xlsx extension
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "persons.xlsx");
         }
     }
 }
