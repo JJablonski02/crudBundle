@@ -75,7 +75,7 @@ namespace crudTests
 
             //Act
 
-            await action.Should().ThrowAsync<ArgumentNullException>();
+            await action.Should().ThrowAsync<ArgumentException>();
             //await _personService.AddPerson(personAddRequest));
 
         }
@@ -220,9 +220,20 @@ namespace crudTests
             CountryResponse country_response_1 = await _countriesService.AddCountry(country_request_1);
             CountryResponse country_response_2 = await _countriesService.AddCountry(country_request_2);
 
-            PersonAddRequest person_request_1 = _fixture.Build<PersonAddRequest>().With(temp => temp.Email, "sam@example.pl").Create();
-            PersonAddRequest person_request_2 = _fixture.Build<PersonAddRequest>().With(temp => temp.Email, "Max@example.pl").Create();
-            PersonAddRequest person_request_3 = _fixture.Build<PersonAddRequest>().With(temp => temp.Email, "Lamar@example.pl").Create();
+            PersonAddRequest person_request_1 = _fixture.Build<PersonAddRequest>()
+            .With(temp => temp.Email, "someone_1@example.com")
+            .With(temp => temp.CountryID, country_response_1.CountryID)
+            .Create();
+
+            PersonAddRequest person_request_2 = _fixture.Build<PersonAddRequest>()
+             .With(temp => temp.Email, "someone_2@example.com")
+             .With(temp => temp.CountryID, country_response_2.CountryID)
+             .Create();
+
+            PersonAddRequest person_request_3 = _fixture.Build<PersonAddRequest>()
+             .With(temp => temp.Email, "someone_3@example.com")
+             .With(temp => temp.CountryID, country_response_2.CountryID)
+             .Create();
 
             List<PersonAddRequest> person_requests = new List<PersonAddRequest>() { person_request_1, person_request_2, person_request_3 };
             List<PersonResponse> person_response_list_from_add = new List<PersonResponse>();
@@ -232,6 +243,7 @@ namespace crudTests
                 PersonResponse person_response = await _personService.AddPerson(person_request);
                 person_response_list_from_add.Add(person_response);
             }
+
             //print person_response_list_from_add
             _testOutputHelper.WriteLine("Expected");
             foreach (PersonResponse person_response_from_add in person_response_list_from_add)
@@ -239,10 +251,10 @@ namespace crudTests
                 _testOutputHelper.WriteLine(person_response_from_add.ToString());
             }
             //Act
-            List<PersonResponse>? persons_list_from_search = await _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
+            List<PersonResponse>? persons_list_from_search = await _personService.GetFilteredPersons(nameof(Person.PersonName), "");
 
             //print persons_list_from_get
-            _testOutputHelper.WriteLine("Actual");
+            _testOutputHelper.WriteLine("Actual:");
             foreach (PersonResponse person_response_from_get in persons_list_from_search)
             {
                 _testOutputHelper.WriteLine(person_response_from_get.ToString());
@@ -262,7 +274,7 @@ namespace crudTests
 
             //}
 
-            persons_list_from_search.Should().OnlyContain(temp => temp.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase));
+            persons_list_from_search.Should().BeEquivalentTo(person_response_list_from_add);
         }
 
             //First we will add few persons; and then we will search based on person name with some search string.
@@ -277,9 +289,21 @@ namespace crudTests
             CountryResponse country_response_1 = await _countriesService.AddCountry(country_request_1);
             CountryResponse country_response_2 = await _countriesService.AddCountry(country_request_2);
 
-            PersonAddRequest person_request_1 = _fixture.Build<PersonAddRequest>().With(temp => temp.Email, "sam@example.pl").Create();
-            PersonAddRequest person_request_2 = _fixture.Build<PersonAddRequest>().With(temp => temp.Email, "Max@example.pl").Create();
-            PersonAddRequest person_request_3 = _fixture.Build<PersonAddRequest>().With(temp => temp.Email, "Lamar@example.pl").Create();
+            PersonAddRequest person_request_1 = _fixture.Build<PersonAddRequest>()
+                .With(temp => temp.PersonName, "Smith")
+                .With(temp => temp.Email, "smith@example.pl")
+                .With(temp => temp.CountryID, country_response_1.CountryID)
+                .Create();
+            PersonAddRequest person_request_2 = _fixture.Build<PersonAddRequest>()
+                .With(temp => temp.PersonName, "Max")
+                .With(temp => temp.Email, "Max@example.pl")
+                .With(temp => temp.CountryID, country_response_2.CountryID)
+                .Create();
+            PersonAddRequest person_request_3 = _fixture.Build<PersonAddRequest>()
+                .With(temp => temp.PersonName, "Cris")
+                .With(temp => temp.Email, "cris@example.pl")
+                .With(temp => temp.CountryID, country_response_1.CountryID)
+                .Create();
 
             List<PersonAddRequest> person_requests = new List<PersonAddRequest>() { person_request_1, person_request_2, person_request_3 };
             List<PersonResponse> person_response_from_list_from_add = new List<PersonResponse>();
@@ -296,7 +320,7 @@ namespace crudTests
                 _testOutputHelper.WriteLine(person_response_from_add.ToString());
             }
             //Act
-            List<PersonResponse>? persons_list_from_search = await _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
+            List<PersonResponse> persons_list_from_search = await _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
 
             //print persons_list_from_get
             _testOutputHelper.WriteLine("Actual");
@@ -304,6 +328,8 @@ namespace crudTests
             {
                 _testOutputHelper.WriteLine(person_response_from_get.ToString());
             }
+
+            //Assert
 
             //foreach (PersonResponse person_response_from_add in person_response_from_list_from_add)
             //{
