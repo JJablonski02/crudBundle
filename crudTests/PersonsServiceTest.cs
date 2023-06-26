@@ -1,4 +1,5 @@
 ﻿using Entities;
+using EntityFrameworkCoreMock;
 using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -19,9 +20,20 @@ namespace crudTests
         private readonly ITestOutputHelper _testOutputHelper;
         public PersonsServiceTest(ITestOutputHelper testOutputHelper)
         {
-            _countriesService = new CountriesService(new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options));
-            _personService = new PersonsService(new PersonsDbContext(new DbContextOptionsBuilder<PersonsDbContext>().Options), _countriesService);
+            var countriesInitialData = new List<Country>() { };
+            var personsInitialData = new List<Person>() { };
+
+            DbContextMock<ApplicationDbContext> dbContextMock =
+                new DbContextMock<ApplicationDbContext>(new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+
+            ApplicationDbContext dbContext = dbContextMock.Object;
+            dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
+            dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
+
+            _countriesService = new CountriesService(dbContext);
+            _personService = new PersonsService(dbContext, _countriesService);
             _testOutputHelper = testOutputHelper;
+
         }
         #region AddPerson
 
@@ -472,15 +484,15 @@ namespace crudTests
 
         //When we supply null as PersonUpdateRequest, it should throw ArgumentNullException
         [Fact]
-        public void UpdatePerson_NullPerson()
+        public async Task UpdatePerson_NullPerson()
         {
             //Arrange
             PersonUpdateRequest? person_update_request = null;
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async() =>
             {
-                _personService.UpdatePerson(person_update_request);
+                await _personService.UpdatePerson(person_update_request);
             });
         }
 
@@ -525,10 +537,10 @@ namespace crudTests
             person_update_request.PersonName = null;
 
             //Assert
-            Assert.Throws<ArgumentException>(() =>
+            await Assert.ThrowsAsync<ArgumentException>(async() =>
             {
                 //Act
-                _personService.UpdatePerson(person_update_request);
+                await _personService.UpdatePerson(person_update_request);
             });
         }
 
