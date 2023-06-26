@@ -13,7 +13,7 @@ namespace RepositoryContracts
         /// </summary>
         /// <param name="person"></param>
         /// <returns>Returns the country object after adding it to the data store</returns>
-        Task<Country> AddCountry(Person person);
+        Task<Country> AddCountry(Country country);
 
         /// <summary>
         /// Returns all countries in the data store
@@ -26,7 +26,7 @@ namespace RepositoryContracts
         /// </summary>
         /// <param name="countryID"></param>
         /// <returns>Matching country or null</returns>
-        Task<Country> GetCountryByCountryID(Guid countryID);
+        Task<Country?> GetCountryByCountryID(Guid countryID);
 
         /// <summary>
         /// Returns a country object based on the given country name

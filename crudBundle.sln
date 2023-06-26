@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "crudTests", "crudTests\crud
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryContracts", "RepositoryContracts\RepositoryContracts.csproj", "{575F4EB3-0E03-4A9D-B7EA-7EEAE306FBCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{E34A158F-8D32-43EC-A005-7737721A516F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{575F4EB3-0E03-4A9D-B7EA-7EEAE306FBCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{575F4EB3-0E03-4A9D-B7EA-7EEAE306FBCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{575F4EB3-0E03-4A9D-B7EA-7EEAE306FBCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E34A158F-8D32-43EC-A005-7737721A516F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E34A158F-8D32-43EC-A005-7737721A516F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E34A158F-8D32-43EC-A005-7737721A516F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E34A158F-8D32-43EC-A005-7737721A516F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
