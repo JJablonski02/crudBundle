@@ -34,6 +34,6 @@ namespace ServiceContracts
         /// </summary>
         /// <param name="fomrFile"></param>
         /// <returns>Returns the country object after adding it (including newly generated </returns>
-        Task<int> UploadFromCountriesFromExcelFile(IFormFile formFile);
+        Task<int> UploadCountriesFromExcelFile(IFormFile formFile);
     }
 }

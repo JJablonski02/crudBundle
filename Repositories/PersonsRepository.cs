@@ -7,8 +7,8 @@ namespace Repositories
 {
     public class PersonsRepository : IPersonsRepository
     {
-        private readonly Entities.ApplicationDbContext _DbContext;
-        public PersonsRepository(Entities.ApplicationDbContext applicationDbContext)
+        private readonly ApplicationDbContext _DbContext;
+        public PersonsRepository(ApplicationDbContext applicationDbContext)
         {
             _DbContext = applicationDbContext;
         }

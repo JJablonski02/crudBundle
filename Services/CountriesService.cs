@@ -69,7 +69,7 @@ namespace Services
             return country_response_from_list.ToCountryResponse();
         }
 
-        public async Task<int> UploadFromCountriesFromExcelFile(IFormFile formFile)
+        public async Task<int> UploadCountriesFromExcelFile(IFormFile formFile)
         {
             MemoryStream memoryStream = new MemoryStream();
             await formFile.CopyToAsync(memoryStream);

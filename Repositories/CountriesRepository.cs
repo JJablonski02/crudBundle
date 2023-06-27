@@ -4,7 +4,7 @@ using RepositoryContracts;
 
 namespace Repositories
 {
-    public class CountriesRepository : RepositoryContracts.ICountriesRepository
+    public class CountriesRepository : ICountriesRepository
     {
         private readonly Entities.ApplicationDbContext _DbContext;
         public CountriesRepository(Entities.ApplicationDbContext applicationDbContext)

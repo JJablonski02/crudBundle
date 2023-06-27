@@ -35,7 +35,7 @@ namespace crudBundle.Controllers
                 return View();
             }
 
-            int countriesCountInserted = await _countriesService.UploadFromCountriesFromExcelFile(excelFile);
+            int countriesCountInserted = await _countriesService.UploadCountriesFromExcelFile(excelFile);
 
             ViewBag.Message = $"{countriesCountInserted} Countries Uploaded ";
             return View();
