@@ -7,8 +7,8 @@ namespace Repositories
 {
     public class PersonsRepository : IPersonsRepository
     {
-        private readonly ApplicationDbContext _DbContext;
-        public PersonsRepository(ApplicationDbContext applicationDbContext)
+        private readonly Entities.ApplicationDbContext _DbContext;
+        public PersonsRepository(Entities.ApplicationDbContext applicationDbContext)
         {
             _DbContext = applicationDbContext;
         }
@@ -29,7 +29,7 @@ namespace Repositories
             return rowsDeleted > 0;
         }
 
-        public async Task<Person?> GerPersonByPersonID(Guid personID)
+        public async Task<Person?> GetPersonByPersonID(Guid personID)
         {
             return await _DbContext.Persons.Include("Country").FirstOrDefaultAsync(temp => temp.PersonID == personID);
         }

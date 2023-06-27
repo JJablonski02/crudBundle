@@ -4,10 +4,10 @@ using RepositoryContracts;
 
 namespace Repositories
 {
-    public class CountriesRepository : ICountriesRepository
+    public class CountriesRepository : RepositoryContracts.ICountriesRepository
     {
-        private readonly ApplicationDbContext _DbContext;
-        public CountriesRepository(ApplicationDbContext applicationDbContext)
+        private readonly Entities.ApplicationDbContext _DbContext;
+        public CountriesRepository(Entities.ApplicationDbContext applicationDbContext)
         {
             _DbContext = applicationDbContext;
         }

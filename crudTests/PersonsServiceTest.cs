@@ -32,7 +32,7 @@ namespace crudTests
             dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
             dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
 
-            _countriesService = new CountriesService(dbContext);
+            _countriesService = new CountriesService(null);
             _personService = new PersonsService(dbContext, _countriesService);
             _testOutputHelper = testOutputHelper;
         }

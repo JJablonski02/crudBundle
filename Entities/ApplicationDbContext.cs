@@ -1,11 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Entities
 {
@@ -28,8 +22,8 @@ namespace Entities
 
             //Seed to Countries
 
-            string countriesJson =  File.ReadAllText("countries.json");
-            List<Country>? countries = JsonSerializer.Deserialize<List<Country>>(countriesJson);
+            string countriesJson =  System.IO.File.ReadAllText("countries.json");
+            List<Country> countries = System.Text.Json.JsonSerializer.Deserialize<List<Country>>(countriesJson);
 
             foreach(Country country in countries)
             {
@@ -38,8 +32,8 @@ namespace Entities
 
             //Seed to Persons
 
-            string personsJson = File.ReadAllText("persons.json");
-            List<Person>? persons = JsonSerializer.Deserialize<List<Person>>(personsJson);
+            string personsJson = System.IO.File.ReadAllText("persons.json");
+            List<Person> persons = System.Text.Json.JsonSerializer.Deserialize<List<Person>>(personsJson);
 
             foreach (Person person in persons)
             {
