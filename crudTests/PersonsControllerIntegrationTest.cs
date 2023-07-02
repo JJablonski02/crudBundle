@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
 using System.Net.Http;
 using Xunit;
+using Fizzler;
+using Fizzler.Systems.HtmlAgilityPack;
+using HtmlAgilityPack;
 
 namespace crudTests
 {
@@ -23,6 +26,13 @@ namespace crudTests
 
             //Assert
             response.Should().BeSuccessful(); //2xx
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            HtmlDocument html = new HtmlDocument();
+            html.LoadHtml(responseBody);
+
+            var document = html.DocumentNode;
+            document.QuerySelectorAll("table.persons").Should().NotBeNull(); // Css class with class of persons (located in Index table class= "... persons")
         }
         #endregion
     }
