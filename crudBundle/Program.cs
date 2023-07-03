@@ -4,15 +4,27 @@ using Microsoft.EntityFrameworkCore;
 using Entities;
 using RepositoryContracts;
 using Repositories;
+using Microsoft.AspNetCore.HttpLogging;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureLogging(loggingProvider =>
+
+//logging
+//builder.Host.ConfigureLogging(loggingProvider =>
+//{
+//    loggingProvider.ClearProviders();
+//    loggingProvider.AddConsole();
+//    loggingProvider.AddDebug();
+//    loggingProvider.AddEventLog();
+//});
+
+//Serilog
+builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, LoggerConfiguration loggerConfiguration) =>
 {
-    loggingProvider.ClearProviders();
-    loggingProvider.AddConsole();
-    loggingProvider.AddDebug();
-    loggingProvider.AddEventLog();
+    loggerConfiguration.ReadFrom.Configuration(context.Configuration).ReadFrom.Services(services); // Reading the configuration
+                                                                                                   // from appsettings.json, reads out
+                                                                                                   // current app's services and make them available to serilog
 });
 
 builder.Services.AddControllersWithViews();
@@ -31,18 +43,27 @@ builder.Services.AddDbContext<ApplicationDbContext>
             .GetConnectionString("DefaultConnection"));
     });
 
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
+
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
-app.Logger.LogDebug("debug-message");
-app.Logger.LogInformation("information-message");
-app.Logger.LogCritical("critical-message");
-app.Logger.LogError("error-message");
-app.Logger.LogError("warning-message");
+app.UseHttpLogging();
+
+//app.Logger.LogDebug("debug-message");
+//app.Logger.LogInformation("information-message");
+//app.Logger.LogCritical("critical-message");
+//app.Logger.LogError("error-message");
+//app.Logger.LogError("warning-message");
 
 if (builder.Environment.IsEnvironment("Test") == false)
 Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa" );
