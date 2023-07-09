@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using crudBundle.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 using ServiceContracts.DTO;
 
 namespace crudBundle.Filters.ActionFilters
@@ -18,7 +19,28 @@ namespace crudBundle.Filters.ActionFilters
             //throw exceptions to either return the exception to the exception filter(if exists) or return the error response to the browser :)
             _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuted");
 
-            
+            PersonsController personsController = (PersonsController)context.Controller;
+
+            IDictionary<string,object?>? parameters =(IDictionary<string,object?>?) context.HttpContext.Items["arguments"];
+            if(parameters is not null)
+            {
+                if (parameters.ContainsKey("searchBy"))
+                {
+                    personsController.ViewData["searchBy"] = Convert.ToString(parameters["serachBy"]); 
+                }
+                if (parameters.ContainsKey("searchString"))
+                {
+                    personsController.ViewData["searchString"] = Convert.ToString(parameters["searchString"]);
+                }
+                if (parameters.ContainsKey("sortBy"))
+                {
+                    personsController.ViewData["sortBy"] = Convert.ToString(parameters["sortBy"]);
+                }
+                if (parameters.ContainsKey("sortOrder"))
+                {
+                    personsController.ViewData["sortOrder"] = Convert.ToString(parameters["sortOrder"]);
+                }
+            }
         }
 
         public void OnActionExecuting(ActionExecutingContext context) // Firstly
@@ -26,7 +48,11 @@ namespace crudBundle.Filters.ActionFilters
             //Here the method can:
             //Validate action method parameteres, short-circuit the action(prevent action from execution) and return a different IActionResult,
             //access the action method parameters, read them and do necessary manipulations on them
+
+            context.HttpContext.Items["arguments"] = context.ActionArguments;
+
             //To do: add before logic here
+
             _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuting");
             if (context.ActionArguments.ContainsKey("searchBy"))
             {
