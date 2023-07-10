@@ -35,32 +35,30 @@ namespace crudBundle.Controllers
             _logger.LogDebug($"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
 
             //Searching
-            ViewBag.SearchFields = new Dictionary<string, string>()
-            {
-                { nameof(PersonResponse.PersonName), "Person Name" },
-                { nameof(PersonResponse.Email), "Email" },
-                { nameof(PersonResponse.DateOfBirth), "Date of Birth" },
-                { nameof(PersonResponse.Gender), "Gender" },
-                { nameof(PersonResponse.CountryID), "Country" },
-                { nameof(PersonResponse.Address), "Address" },
-                { nameof(PersonResponse.ReceiveNewsLetters), "Receive News Letters" },
+            //ViewBag.SearchFields = new Dictionary<string, string>()
+            //{
+            //    { nameof(PersonResponse.PersonName), "Person Name" },
+            //    { nameof(PersonResponse.Email), "Email" },
+            //    { nameof(PersonResponse.DateOfBirth), "Date of Birth" },
+            //    { nameof(PersonResponse.Gender), "Gender" },
+            //    { nameof(PersonResponse.CountryID), "Country" },
+            //    { nameof(PersonResponse.Address), "Address" },
+            //    { nameof(PersonResponse.ReceiveNewsLetters), "Receive News Letters" },
 
-            };
+            //};
 
             List<PersonResponse>? persons = await _personsService.GetFilteredPersons(searchBy, searchString);
-            ViewBag.CurrentSearchBy = searchBy;
-            ViewBag.CurrentSearchString = searchString;
+            //ViewBag.CurrentSearchBy = searchBy;
+            //ViewBag.CurrentSearchString = searchString;
 
             //Sorting
-            if (persons is not null) 
-            {
-            List<PersonResponse>? sortedPersons = await _personsService.GetSortedPersons(persons, sortBy, sortOrder);
-            ViewBag.CurrentSortBy = sortBy;
-            ViewBag.CurrentSortOrder = sortOrder.ToString();
+
+                List<PersonResponse>? sortedPersons = await _personsService.GetSortedPersons(persons, sortBy, sortOrder);
+            //ViewBag.CurrentSortBy = sortBy;
+            //ViewBag.CurrentSortOrder = sortOrder.ToString();
+
 
             return View(sortedPersons);
-            }
-            return RedirectToAction("Index");
         }
 
         //Executes when the user clicks on "Create Person" hyperlink (while opening the create view)

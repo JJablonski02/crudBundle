@@ -17,30 +17,41 @@ namespace crudBundle.Filters.ActionFilters
             //manipulate the ViewData
             //change the result returned from the action method
             //throw exceptions to either return the exception to the exception filter(if exists) or return the error response to the browser :)
-            _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuted");
+            _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuted method");
 
             PersonsController personsController = (PersonsController)context.Controller;
 
             IDictionary<string,object?>? parameters =(IDictionary<string,object?>?) context.HttpContext.Items["arguments"];
-            if(parameters is not null)
+
+            if (parameters is not null)
             {
                 if (parameters.ContainsKey("searchBy"))
                 {
-                    personsController.ViewData["searchBy"] = Convert.ToString(parameters["serachBy"]); 
+                    personsController.ViewData["CurrentSearchBy"] = Convert.ToString(parameters["serachBy"]); 
                 }
                 if (parameters.ContainsKey("searchString"))
                 {
-                    personsController.ViewData["searchString"] = Convert.ToString(parameters["searchString"]);
+                    personsController.ViewData["CurrentSearchString"] = Convert.ToString(parameters["searchString"]);
                 }
                 if (parameters.ContainsKey("sortBy"))
                 {
-                    personsController.ViewData["sortBy"] = Convert.ToString(parameters["sortBy"]);
+                    personsController.ViewData["CurrentSortBy"] = Convert.ToString(parameters["sortBy"]);
                 }
                 if (parameters.ContainsKey("sortOrder"))
                 {
-                    personsController.ViewData["sortOrder"] = Convert.ToString(parameters["sortOrder"]);
+                    personsController.ViewData["CurrentSortOrder"] = Convert.ToString(parameters["sortOrder"]);
                 }
             }
+
+            personsController.ViewBag.SearchFields = new Dictionary<string, string>()
+            {
+                {nameof(PersonResponse.PersonName), "Person Name"},
+                {nameof(PersonResponse.Email), "Email" },
+                {nameof(PersonResponse.DateOfBirth), "Date of birth" },
+                {nameof(PersonResponse.Gender), "Gender" },
+                {nameof(PersonResponse.CountryID), "Country" },
+                {nameof(PersonResponse.Address), "Address" }
+            };
         }
 
         public void OnActionExecuting(ActionExecutingContext context) // Firstly
@@ -53,13 +64,14 @@ namespace crudBundle.Filters.ActionFilters
 
             //To do: add before logic here
 
-            _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuting");
+            _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuting method");
+
             if (context.ActionArguments.ContainsKey("searchBy"))
             {
                 string? searchBy = Convert.ToString(context.ActionArguments["searchBy"]);
 
                 //validate the searchBy parametere value
-                if(searchBy is not null)
+                if(!string.IsNullOrEmpty(searchBy))
                 {
                     var searchByOptions = new List<string>()
                     {

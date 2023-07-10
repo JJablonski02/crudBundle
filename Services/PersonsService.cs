@@ -94,7 +94,8 @@ namespace Services
         {
             _logger.LogInformation("GetFilteredPersons of PersonsService");
 
-            List<Person> persons = null;
+            List<Person> persons;
+
             using (Operation.Time("Time for FilteredPersons from database"))
             {
                 persons = searchBy switch
@@ -136,6 +137,7 @@ namespace Services
         public async Task<List<PersonResponse>> GetSortedPersons(List<PersonResponse> allPersons, string sortBy, SortOrderOptions sortOrder)
         {
             _logger.LogInformation("GetSortedPersons of PersonsService");
+
             if (string.IsNullOrEmpty(sortBy))
                 return allPersons;
 
