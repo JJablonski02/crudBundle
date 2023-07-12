@@ -8,7 +8,9 @@ using ServiceContracts.Enums;
 
 namespace crudBundle.Controllers
 {
-    [Route("persons")]
+    [Route("[controller]")]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller" })]
+
     public class PersonsController : Controller
     {
         //private fields
@@ -27,6 +29,7 @@ namespace crudBundle.Controllers
         [Route("[action]")]
         [Route("/")]
         [TypeFilter(typeof(PersonsListActionFilter))]
+        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] {"X-Custom-Key-From-Action", "X-Custom-Value-From-Action"})]
         public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName),
             SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
@@ -64,6 +67,8 @@ namespace crudBundle.Controllers
         //Executes when the user clicks on "Create Person" hyperlink (while opening the create view)
         [HttpGet]
         [Route("[action]")]
+        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "my-key", "my-value" })]
+
         public async Task<IActionResult> Create()
         {
             List<CountryResponse> countries = await _countriesService.GetAllCountries();

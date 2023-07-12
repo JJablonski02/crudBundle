@@ -6,6 +6,7 @@ using RepositoryContracts;
 using Repositories;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
+using crudBundle.Filters.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,14 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
                                                                                                    // current app's services and make them available to serilog
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    //options.Filters.Add<ResponseHeaderActionFilter>();
+
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+
+    options.Filters.Add(new ResponseHeaderActionFilter(logger, "X-Key-From-Global", "-X-Key-From-Global"));
+});
 
 //add services into IoC Container
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();

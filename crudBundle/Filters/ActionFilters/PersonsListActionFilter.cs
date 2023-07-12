@@ -17,7 +17,7 @@ namespace crudBundle.Filters.ActionFilters
             //manipulate the ViewData
             //change the result returned from the action method
             //throw exceptions to either return the exception to the exception filter(if exists) or return the error response to the browser :)
-            _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuted method");
+            _logger.LogInformation("{FilterName}.{MethodName} method", nameof(PersonsListActionFilter), nameof(ActionExecutedContext));
 
             PersonsController personsController = (PersonsController)context.Controller;
 
@@ -27,7 +27,7 @@ namespace crudBundle.Filters.ActionFilters
             {
                 if (parameters.ContainsKey("searchBy"))
                 {
-                    personsController.ViewData["CurrentSearchBy"] = Convert.ToString(parameters["serachBy"]); 
+                    personsController.ViewData["CurrentSearchBy"] = Convert.ToString(parameters["searchBy"]); 
                 }
                 if (parameters.ContainsKey("searchString"))
                 {
@@ -64,7 +64,7 @@ namespace crudBundle.Filters.ActionFilters
 
             //To do: add before logic here
 
-            _logger.LogInformation("PersonsListActionFilter.PersonOnActionExecuting method");
+            _logger.LogInformation("{FilterName}.{MethodName} method", nameof(PersonsListActionFilter), nameof(ActionExecutingContext));
 
             if (context.ActionArguments.ContainsKey("searchBy"))
             {
