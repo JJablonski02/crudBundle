@@ -4,6 +4,7 @@
 * Search and sort operations on the data
 * Ability to export the data in multiple formats: CSV, Excel, PDF
 * Ability to upload data from an Excel file
+* maintaining the principles of SOLID
 ## In Progress below
 * Clean architexture implementation
 * Authentication and registration system
