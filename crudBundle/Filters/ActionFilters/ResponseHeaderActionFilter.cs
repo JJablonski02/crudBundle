@@ -18,25 +18,16 @@ namespace crudBundle.Filters.ActionFilters
             Order = order;
         }
 
-        
-
-        //after
-        public void OnActionExecuted(ActionExecutedContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            _logger.LogInformation("{FilterName}.{MethodName} method", nameof(ResponseHeaderActionFilter), nameof(OnActionExecuted));
-          
+            _logger.LogInformation("{FilterName}.{MethodName} method - before", nameof(ResponseHeaderActionFilter), nameof(OnActionExecutionAsync));
+
+            await next();
+
+            _logger.LogInformation("{FilterName}.{MethodName} method - after", nameof(ResponseHeaderActionFilter), nameof(OnActionExecutionAsync));
+
             context.HttpContext.Response.Headers[_key] = _value;
-        }
 
-        //before
-        public void OnActionExecuting(ActionExecutingContext context)
-        {
-            _logger.LogInformation("{FilterName}.{MethodName} method", nameof(ResponseHeaderActionFilter), nameof(OnActionExecuting));
-        }
-
-        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -9,7 +9,7 @@ using ServiceContracts.Enums;
 namespace crudBundle.Controllers
 {
     [Route("[controller]")]
-    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller" }, Order = 3)]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller", 3}, Order = 3)]
 
     public class PersonsController : Controller
     {
@@ -29,7 +29,7 @@ namespace crudBundle.Controllers
         [Route("[action]")]
         [Route("/")]
         [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
-        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] {"X-Custom-Key-From-Action", "X-Custom-Value-From-Action"}, Order = 1)]
+        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] {"X-Custom-Key-From-Action", "X-Custom-Value-From-Action", 1}, Order = 1)]
         public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName),
             SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
@@ -67,7 +67,7 @@ namespace crudBundle.Controllers
         //Executes when the user clicks on "Create Person" hyperlink (while opening the create view)
         [HttpGet]
         [Route("[action]")]
-        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "my-key", "my-value" })]
+        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "my-key", "my-value", 4 })]
 
         public async Task<IActionResult> Create()
         {
@@ -85,7 +85,8 @@ namespace crudBundle.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create(PersonAddRequest personAddRequest)
+        [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
+        public async Task<IActionResult> Create(PersonAddRequest personRequest)
         {
             if(!ModelState.IsValid)
             {
@@ -94,11 +95,11 @@ namespace crudBundle.Controllers
                 new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() });
 
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View(personAddRequest);
+                return View(personRequest);
             }
 
             //call the service method
-            PersonResponse personResponse = await _personsService.AddPerson(personAddRequest);
+            PersonResponse personResponse = await _personsService.AddPerson(personRequest);
             
             //navigate to Index() action method
             return RedirectToAction("Index", "Persons");
@@ -125,9 +126,9 @@ namespace crudBundle.Controllers
 
         [HttpPost]
         [Route("[action]/{personID}")]
-        public async Task<IActionResult> Edit(PersonUpdateRequest personUpdateRequest)
+        public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
         {
-            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personUpdateRequest.PersonID);
+            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personRequest.PersonID);
             if(personResponse == null)
             {
                 return RedirectToAction("Index");
@@ -135,7 +136,7 @@ namespace crudBundle.Controllers
 
             if(ModelState.IsValid)
             {
-                PersonResponse updatedPerson = await _personsService.UpdatePerson(personUpdateRequest);
+                PersonResponse updatedPerson = await _personsService.UpdatePerson(personRequest);
                 return RedirectToAction("Index");
             }
             else
