@@ -37,8 +37,9 @@ namespace crudBundle.Filters.ActionFilters
             else
             {
                 await next();
-                //after logic
             }
+
+            //Before logic
         }
     }
 }
