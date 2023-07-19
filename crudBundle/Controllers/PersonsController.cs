@@ -1,5 +1,6 @@
 ﻿using crudBundle.Filters.ActionFilters;
 using crudBundle.Filters.AuthorizationFilters;
+using crudBundle.Filters.ExceptionFilters;
 using crudBundle.Filters.ResourceFilters;
 using crudBundle.Filters.ResultFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace crudBundle.Controllers
 {
     [Route("[controller]")]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller", 3 }, Order = 3)]
+    [TypeFilter(typeof(HandleExceptionFilter)     )]
 
     public class PersonsController : Controller
     {
