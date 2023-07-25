@@ -32,9 +32,7 @@ builder.Services.AddControllersWithViews(options =>
 {
     //options.Filters.Add<ResponseHeaderActionFilter>(5); // 5 is Order
 
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-
-    options.Filters.Add(new ResponseHeaderActionFilter(logger, "X-Key-From-Global", "-X-Key-From-Global", 2));
+    options.Filters.Add(new ResponseHeaderActionFilter("X-Key-From-Global", "-X-Key-From-Global", 2));
 });
 
 //add services into IoC Container
@@ -51,7 +49,9 @@ builder.Services.AddDbContext<ApplicationDbContext>
             .GetConnectionString("DefaultConnection"));
     });
 
-builder.Services.AddHttpLogging(options =>
+builder.Services.AddTransient<PersonsListActionFilter>();
+
+builder.Services.AddHttpLogging(options => 
 {
     options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
 });

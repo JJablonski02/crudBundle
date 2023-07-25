@@ -1,4 +1,5 @@
-﻿using crudBundle.Filters.ActionFilters;
+﻿using crudBundle.Filters;
+using crudBundle.Filters.ActionFilters;
 using crudBundle.Filters.AuthorizationFilters;
 using crudBundle.Filters.ExceptionFilters;
 using crudBundle.Filters.ResourceFilters;
@@ -14,7 +15,8 @@ namespace crudBundle.Controllers
 {
     [Route("[controller]")]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller", 3 }, Order = 3)]
-    [TypeFilter(typeof(HandleExceptionFilter)     )]
+    [TypeFilter(typeof(HandleExceptionFilter))]
+    [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
 
     public class PersonsController : Controller
     {
@@ -33,9 +35,11 @@ namespace crudBundle.Controllers
         [HttpGet]
         [Route("[action]")]
         [Route("/")]
-        [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
-        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Action", "X-Custom-Value-From-Action", 1 }, Order = 1)]
+        [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
+        //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Action", "X-Custom-Value-From-Action", 1 }, Order = 1)]
+
         [TypeFilter(typeof(PersonsListResultFilter))]
+        [SkipFilter]
         public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName),
             SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
@@ -55,7 +59,7 @@ namespace crudBundle.Controllers
         //Executes when the user clicks on "Create Person" hyperlink (while opening the create view)
         [HttpGet]
         [Route("[action]")]
-        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "my-key", "my-value", 4 })]
+        [ResponseHeaderActionFilter("my-key", "my-value", 4)]
 
         public async Task<IActionResult> Create()
         {
@@ -86,7 +90,7 @@ namespace crudBundle.Controllers
 
         [HttpGet]
         [Route("[action]/{personID}")]
-        [TypeFilter(typeof(TokenResultFilter))]
+        //[TypeFilter(typeof(TokenResultFilter))]
         public async Task<IActionResult> Edit(Guid personID)
         {
             PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personID);
@@ -108,6 +112,7 @@ namespace crudBundle.Controllers
         [Route("[action]/{personID}")]
         [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
         [TypeFilter(typeof(TokenAuthorizationFilter))]
+        [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
         public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
         {
             PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personRequest.PersonID);

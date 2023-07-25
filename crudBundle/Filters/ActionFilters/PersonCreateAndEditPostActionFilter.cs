@@ -6,12 +6,14 @@ using ServiceContracts.DTO;
 
 namespace crudBundle.Filters.ActionFilters
 {
-    public class PersonCreateAndEditPostActionFilter : IAsyncActionFilter
+    public class PersonCreateAndEditPostActionFilter : ActionFilterAttribute
     {
         private readonly ICountriesService _countriesService;
-        public PersonCreateAndEditPostActionFilter(ICountriesService countriesService)
+        private readonly ILogger<PersonCreateAndEditPostActionFilter> _logger;
+        public PersonCreateAndEditPostActionFilter(ICountriesService countriesService, ILogger<PersonCreateAndEditPostActionFilter> logger)
         {
             _countriesService = countriesService;
+            _logger = logger;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -40,6 +42,7 @@ namespace crudBundle.Filters.ActionFilters
             }
 
             //Before logic
+            _logger.LogInformation("In after logic of PersonCreateAndEditActionFilter");
         }
     }
 }
