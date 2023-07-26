@@ -10,7 +10,7 @@ namespace crudBundle.Filters.ResultFilters
         }
 
         public void OnResultExecuting(ResultExecutingContext context)
-        {
+          {
             if (context.Filters.OfType<SkipFilter>().Any())
             {
                 return;
