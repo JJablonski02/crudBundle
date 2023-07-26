@@ -14,7 +14,8 @@ using ServiceContracts.Enums;
 namespace crudBundle.Controllers
 {
     [Route("[controller]")]
-    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller", 3 }, Order = 3)]
+    //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller", 3 }, Order = 3)]
+    [ResponseHeaderFilterFactory("X-Custom-Key-From-Controller", "X-Custom-Value-From-Controller", 3)]
     [TypeFilter(typeof(HandleExceptionFilter))]
     [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
 
@@ -37,6 +38,8 @@ namespace crudBundle.Controllers
         [Route("/")]
         [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
         //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "X-Custom-Key-From-Action", "X-Custom-Value-From-Action", 1 }, Order = 1)]
+        [ResponseHeaderFilterFactory("MyKey-FromAction", "MyValue-FromAction", 1)]
+
 
         [TypeFilter(typeof(PersonsListResultFilter))]
         [SkipFilter]
@@ -59,7 +62,7 @@ namespace crudBundle.Controllers
         //Executes when the user clicks on "Create Person" hyperlink (while opening the create view)
         [HttpGet]
         [Route("[action]")]
-        [ResponseHeaderActionFilter("my-key", "my-value", 4)]
+        [ResponseHeaderFilterFactory("my-key", "my-value", 4)]
 
         public async Task<IActionResult> Create()
         {
