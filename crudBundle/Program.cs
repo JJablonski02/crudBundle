@@ -7,6 +7,7 @@ using Repositories;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
 using crudBundle.Filters.ActionFilters;
+using crudBundle;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,35 +29,7 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
                                                                                                    // current app's services and make them available to serilog
 });
 
-builder.Services.AddTransient<ResponseHeaderActionFilter>();
-
-builder.Services.AddControllersWithViews(options =>
-{
-    //options.Filters.Add<ResponseHeaderActionFilter>(5); // 5 is Order
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-    options.Filters.Add(new ResponseHeaderActionFilter(logger) { Key = "X-Key-From-Global", Value = "-X-Key-From-Global", Order = 2 });
-});
-
-//add services into IoC Container
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
-
-builder.Services.AddScoped<ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonsService, PersonsService>();
-
-builder.Services.AddDbContext<ApplicationDbContext>
-    (options =>
-    {
-        options.UseSqlServer(builder.Configuration
-            .GetConnectionString("DefaultConnection"));
-    });
-
-builder.Services.AddTransient<PersonsListActionFilter>();
-
-builder.Services.AddHttpLogging(options => 
-{
-    options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
-});
+builder.Services.ConfigureServices();
 
 var app = builder.Build();
 
