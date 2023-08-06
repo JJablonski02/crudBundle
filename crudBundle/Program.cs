@@ -29,7 +29,7 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
                                                                                                    // current app's services and make them available to serilog
 });
 
-builder.Services.ConfigureServices();
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 

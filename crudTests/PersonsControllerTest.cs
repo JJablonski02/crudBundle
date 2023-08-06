@@ -7,6 +7,8 @@ using crudBundle.Controllers;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
 
 namespace crudTests
 {
@@ -14,9 +16,11 @@ namespace crudTests
     {
         private readonly IPersonsService _personsService;
         private readonly ICountriesService _countriesService;
+        private readonly ILogger<PersonsController> _logger;
 
         private readonly Mock<IPersonsService> _personsServiceMock;
         private readonly Mock<ICountriesService> _countriesServiceMock;
+        private readonly Mock<ILogger<PersonsController>> _loggerMock;
 
         private readonly IFixture _fixture;
         public PersonsControllerTest()
@@ -25,9 +29,11 @@ namespace crudTests
 
             _countriesServiceMock = new Mock<ICountriesService>();
             _personsServiceMock = new Mock<IPersonsService>();
+            _loggerMock = new Mock<ILogger<PersonsController>>();
 
             _countriesService = _countriesServiceMock.Object;
             _personsService = _personsServiceMock.Object;
+            _logger = _loggerMock.Object;
         }
 
         #region Index
@@ -37,7 +43,7 @@ namespace crudTests
             //Arrange
             List<PersonResponse> persons_response_list = _fixture.Create<List<PersonResponse>>();
 
-            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+            PersonsController personsController = new PersonsController(_personsService, _countriesService, _logger);
             
             _personsServiceMock.Setup(temp => temp.GetFilteredPersons(
                 It.IsAny<string>(), 
@@ -87,7 +93,7 @@ namespace crudTests
 
 
 
-            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+            PersonsController personsController = new PersonsController(_personsService, _countriesService, _logger);
 
 
             //Act
@@ -120,7 +126,7 @@ namespace crudTests
 
 
 
-            PersonsController personsController = new PersonsController(_personsService, _countriesService);
+            PersonsController personsController = new PersonsController(_personsService, _countriesService, _logger);
 
 
             //Act

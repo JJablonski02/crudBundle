@@ -14,6 +14,8 @@ namespace crudBundle.Filters.ResultFilters
         {
             //Before logic
             _logger.LogInformation("{FilterName}.{MethodName} - before", nameof(PersonsListResultFilter), nameof(OnResultExecutionAsync));
+            context.HttpContext.Response.Headers["Last-Modified"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+
 
             await next(); //calls the subsequent filter [or] IActionResult
 
@@ -21,7 +23,6 @@ namespace crudBundle.Filters.ResultFilters
 
             _logger.LogInformation("{FilterName}.{MethodName} - before", nameof(PersonsListResultFilter), nameof(OnResultExecutionAsync));
 
-            context.HttpContext.Response.Headers["Last-Modified"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         }
     }
 }

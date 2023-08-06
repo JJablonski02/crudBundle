@@ -1,6 +1,7 @@
 ﻿using crudBundle.Filters.ActionFilters;
 using Entities;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
 using ServiceContracts;
@@ -10,37 +11,39 @@ namespace crudBundle
 {
     public static class ConfiguredServicesExtension
     {
-        public static void ConfigureServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            builder.Services.AddTransient<ResponseHeaderActionFilter>();
+            services.AddTransient<ResponseHeaderActionFilter>();
 
-            builder.Services.AddControllersWithViews(options =>
+            services.AddControllersWithViews(options =>
             {
                 //options.Filters.Add<ResponseHeaderActionFilter>(5); // 5 is Order
-                var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+                var logger = services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
                 options.Filters.Add(new ResponseHeaderActionFilter(logger) { Key = "X-Key-From-Global", Value = "-X-Key-From-Global", Order = 2 });
             });
 
             //add services into IoC Container
-            builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-            builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
+            services.AddScoped<ICountriesRepository, CountriesRepository>();
+            services.AddScoped<IPersonsRepository, PersonsRepository>();
 
-            builder.Services.AddScoped<ICountriesService, CountriesService>();
-            builder.Services.AddScoped<IPersonsService, PersonsService>();
+            services.AddScoped<ICountriesService, CountriesService>();
+            services.AddScoped<IPersonsService, PersonsService>();
 
-            builder.Services.AddDbContext<ApplicationDbContext>
+            services.AddDbContext<ApplicationDbContext>
                 (options =>
                 {
-                    options.UseSqlServer(builder.Configuration
+                    options.UseSqlServer(configuration
                         .GetConnectionString("DefaultConnection"));
                 });
 
-            builder.Services.AddTransient<PersonsListActionFilter>();
+            services.AddTransient<PersonsListActionFilter>();
 
-            builder.Services.AddHttpLogging(options =>
+            services.AddHttpLogging(options =>
             {
                 options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
             });
+
+            return services;
         }
     }
 }
