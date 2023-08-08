@@ -29,6 +29,7 @@ namespace crudBundle.Filters.ActionFilters
 
                     var personRequest = context.ActionArguments["personRequest"];
                     personsController.ViewBag.Errors = personsController.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
                     context.Result = personsController.View(personRequest); //short-aircircuits or skips the subsequent action filters & action method
                 }
                 else
