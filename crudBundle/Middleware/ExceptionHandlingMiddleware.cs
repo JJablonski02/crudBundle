@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Threading.Tasks;
 
 namespace crudBundle.Middleware
@@ -8,16 +9,39 @@ namespace crudBundle.Middleware
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        private readonly IDiagnosticContext _diagnosticContext;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next,ILogger<ExceptionHandlingMiddleware> logger ,IDiagnosticContext diagnosticContext)
         {
-            _next = next;
+            _next = next; //represents the subsequent middleware
+            _logger = logger;
+            _diagnosticContext= diagnosticContext;
         }
 
-        public Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext)
         {
-
-            return _next(httpContext);
+            try
+            {
+                await _next(httpContext);
+            }
+            catch(Exception ex)
+            {
+                if(ex.InnerException != null)
+                {
+                    _logger.LogError("{ExceptionType} {ExceptionMessage}",
+                        ex.InnerException.GetType().ToString(),
+                        ex.InnerException.Message);
+                }
+                else
+                {
+                    _logger.LogError("{ExceptionType} {ExceptionMessage}",
+                        ex.GetType().ToString(),
+                        ex.Message);
+                }
+                httpContext.Response.StatusCode = 500;
+                await httpContext.Response.WriteAsync("Error occured");
+            }
         }
     }
 
