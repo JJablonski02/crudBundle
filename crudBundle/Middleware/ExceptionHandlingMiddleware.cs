@@ -39,8 +39,10 @@ namespace crudBundle.Middleware
                         ex.GetType().ToString(),
                         ex.Message);
                 }
-                httpContext.Response.StatusCode = 500;
-                await httpContext.Response.WriteAsync("Error occured");
+                //httpContext.Response.StatusCode = 500;
+                //await httpContext.Response.WriteAsync("Error occured");
+
+                throw;
             }
         }
     }
