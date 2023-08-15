@@ -27,7 +27,10 @@ namespace crudBundle
             services.AddScoped<IPersonsRepository, PersonsRepository>();
 
             services.AddScoped<ICountriesService, CountriesService>();
-            services.AddScoped<IPersonsGetterService, PersonsGetterService>();
+
+            services.AddScoped<IPersonsGetterService, PersonsGetterServiceChild>();
+            services.AddScoped<PersonsGetterService, PersonsGetterService>();
+
             services.AddScoped<IPersonsAdderService, PersonsAdderService>();
             services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();
             services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
