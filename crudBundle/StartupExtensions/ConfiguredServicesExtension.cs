@@ -1,5 +1,5 @@
 ﻿using crudBundle.Filters.ActionFilters;
-using Entities;
+using EntityObjects;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Repositories;

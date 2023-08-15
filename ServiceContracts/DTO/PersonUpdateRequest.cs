@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using EntityObjects;
 using ServiceContracts.Enums;
 using System;
 using System.Collections.Generic;

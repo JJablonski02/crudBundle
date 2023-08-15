@@ -102,10 +102,8 @@ namespace Entities.Migrations
 
                     b.HasKey("PersonID");
 
-                    b.ToTable("Persons", null, t =>
-                        {
-                            t.HasCheckConstraint("CHK_TIN", "len([TIN]) = 8");
-                        });
+                    b.ToTable("Persons").HasCheckConstraint("CHK_TIN", "len([TIN]) = 8");
+                        
 
                     b.HasData(
                         new

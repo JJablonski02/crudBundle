@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using EntityObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;

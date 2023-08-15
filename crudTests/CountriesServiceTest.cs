@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using Entities;
+using EntityObjects;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;

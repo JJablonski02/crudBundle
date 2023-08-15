@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using EntityObjects;
 using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
@@ -6,8 +6,8 @@ namespace Repositories
 {
     public class CountriesRepository : ICountriesRepository
     {
-        private readonly Entities.ApplicationDbContext _DbContext;
-        public CountriesRepository(Entities.ApplicationDbContext applicationDbContext)
+        private readonly EntityObjects.ApplicationDbContext _DbContext;
+        public CountriesRepository(EntityObjects.ApplicationDbContext applicationDbContext)
         {
             _DbContext = applicationDbContext;
         }

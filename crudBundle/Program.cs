@@ -1,7 +1,7 @@
 using ServiceContracts;
 using Services;
 using Microsoft.EntityFrameworkCore;
-using Entities;
+using EntityObjects;
 using RepositoryContracts;
 using Repositories;
 using Microsoft.AspNetCore.HttpLogging;

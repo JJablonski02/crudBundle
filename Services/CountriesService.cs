@@ -4,7 +4,7 @@ using RepositoryContracts;
 using OfficeOpenXml;
 using ServiceContracts;
 using ServiceContracts.DTO;
-using Entities;
+using EntityObjects;
 
 namespace Services
 {

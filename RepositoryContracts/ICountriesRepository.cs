@@ -1,5 +1,4 @@
-﻿
-using Entities;
+﻿using EntityObjects;
 
 namespace RepositoryContracts
 {

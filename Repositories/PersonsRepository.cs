@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using EntityObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RepositoryContracts;

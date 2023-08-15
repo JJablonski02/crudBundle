@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using EntityObjects;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;

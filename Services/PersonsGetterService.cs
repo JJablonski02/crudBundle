@@ -1,5 +1,5 @@
 ﻿using System;
-using Entities;
+using EntityObjects;
 using ServiceContracts.DTO;
 using ServiceContracts;
 using System.ComponentModel.DataAnnotations;
