@@ -20,7 +20,7 @@ namespace crudTests
 {
     public class PersonsServiceTest
     {
-        private readonly IPersonsService _personService;
+        private readonly IPersonsGetterService _personService;
 
         private readonly Mock<IPersonsRepository> _personsRepositoryMock;
         private readonly IPersonsRepository _personsRepository;
@@ -34,7 +34,7 @@ namespace crudTests
             _personsRepositoryMock = new Mock<IPersonsRepository>();
             _personsRepository = _personsRepositoryMock.Object;
 
-            var loggerMock = new Mock<ILogger<PersonsService>>();
+            var loggerMock = new Mock<ILogger<PersonsGetterService>>();
             var diagnosticContextMock = new Mock<DiagnosticContext>();
 
             _personService = new PersonsService(_personsRepository,loggerMock.Object, diagnosticContextMock.Object);

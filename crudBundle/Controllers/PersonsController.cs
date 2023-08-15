@@ -22,13 +22,21 @@ namespace crudBundle.Controllers
     public class PersonsController : Controller
     {
         //private fields
-        private readonly IPersonsService _personsService;
+        private readonly IPersonsGetterService _personsGetterService;
+        private readonly IPersonsAdderService _personsAdderService;
+        private readonly IPersonsSorterService _personsSorterService;
+        private readonly IPersonsDeleterService _personsDeleterService;
+        private readonly IPersonsUpdaterService _personsUpdaterService;
         private readonly ICountriesService _countriesService;
         private readonly ILogger<PersonsController> _logger;
 
-        public PersonsController(IPersonsService personsService, ICountriesService countriesService, ILogger<PersonsController> logger)
+        public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, IPersonsDeleterService personsDeleterService, IPersonsUpdaterService personsUpdaterService, IPersonsSorterService personsSorterService, ICountriesService countriesService, ILogger<PersonsController> logger)
         {
-            _personsService = personsService;
+            _personsGetterService = personsGetterService;
+            _personsAdderService = personsAdderService;
+            _personsDeleterService = personsDeleterService;
+            _personsUpdaterService = personsUpdaterService;
+            _personsSorterService = personsSorterService;
             _countriesService = countriesService;
             _logger = logger;
         }
@@ -51,10 +59,10 @@ namespace crudBundle.Controllers
             _logger.LogDebug($"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
 
             //Searching
-            List<PersonResponse>? persons = await _personsService.GetFilteredPersons(searchBy, searchString);
+            List<PersonResponse>? persons = await _personsGetterService.GetFilteredPersons(searchBy, searchString);
 
             //Sorting
-            List<PersonResponse>? sortedPersons = await _personsService.GetSortedPersons(persons, sortBy, sortOrder);
+            List<PersonResponse>? sortedPersons = await _personsSorterService.GetSortedPersons(persons, sortBy, sortOrder);
 
             return View(sortedPersons);
         }
@@ -85,7 +93,7 @@ namespace crudBundle.Controllers
         public async Task<IActionResult> Create(PersonAddRequest personRequest)
         {
             //call the service method
-            PersonResponse personResponse = await _personsService.AddPerson(personRequest);
+            PersonResponse personResponse = await _personsAdderService.AddPerson(personRequest);
 
             //navigate to Index() action method
             return RedirectToAction("Index", "Persons");
@@ -96,7 +104,7 @@ namespace crudBundle.Controllers
         //[TypeFilter(typeof(TokenResultFilter))]
         public async Task<IActionResult> Edit(Guid personID)
         {
-            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personID);
+            PersonResponse? personResponse = await _personsGetterService.GetPersonByPersonID(personID);
             if (personResponse == null)
             {
                 return RedirectToAction("Index");
@@ -118,13 +126,13 @@ namespace crudBundle.Controllers
         [TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
         public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
         {
-            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personRequest.PersonID);
+            PersonResponse? personResponse = await _personsGetterService.GetPersonByPersonID(personRequest.PersonID);
             if (personResponse == null)
             {
                 return RedirectToAction("Index");
             }
 
-            PersonResponse updatedPerson = await _personsService.UpdatePerson(personRequest);
+            PersonResponse updatedPerson = await _personsUpdaterService.UpdatePerson(personRequest);
             return RedirectToAction("Index");
         }
 
@@ -132,7 +140,7 @@ namespace crudBundle.Controllers
         [Route("[action]/{personID}")]
         public async Task<IActionResult> Delete(Guid? personID)
         {
-            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personID);
+            PersonResponse? personResponse = await _personsGetterService.GetPersonByPersonID(personID);
             if (personResponse == null)
                 return RedirectToAction("Index");
 
@@ -143,11 +151,11 @@ namespace crudBundle.Controllers
         [Route("[action]/{personID}")]
         public async Task<IActionResult> Delete(PersonUpdateRequest personUpdateRequest)
         {
-            PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personUpdateRequest.PersonID);
+            PersonResponse? personResponse = await _personsGetterService.GetPersonByPersonID(personUpdateRequest.PersonID);
             if (personResponse is null)
                 return RedirectToAction("Index");
 
-            await _personsService.DeletePerson(personUpdateRequest.PersonID);
+            await _personsDeleterService.DeletePerson(personUpdateRequest.PersonID);
             return RedirectToAction("Index");
         }
 
@@ -155,7 +163,7 @@ namespace crudBundle.Controllers
         public async Task<IActionResult> PersonsPDF()
         {
             //List of persons
-            List<PersonResponse> persons = await _personsService.GetAllPersons();
+            List<PersonResponse> persons = await _personsGetterService.GetAllPersons();
 
             //Return view(pdf)
 
@@ -169,7 +177,7 @@ namespace crudBundle.Controllers
         [Route("PersonsCSV")]
         public async Task<IActionResult> PersonsCSV()
         {
-            MemoryStream memoryStream = await _personsService.GetPersonsCSV();
+            MemoryStream memoryStream = await _personsGetterService.GetPersonsCSV();
 
             return File(memoryStream, "application/octet-stream", "persons.csv");
         }
@@ -177,7 +185,7 @@ namespace crudBundle.Controllers
         [Route("PersonsExcel")]
         public async Task<IActionResult> PersonsExcel()
         {
-            MemoryStream memoryStream = await _personsService.GetPersonsExcel();
+            MemoryStream memoryStream = await _personsGetterService.GetPersonsExcel();
 
             //Returns memory stream with xcel mimetype for xlsx extension
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "persons.xlsx");
